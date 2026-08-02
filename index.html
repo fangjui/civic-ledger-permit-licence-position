@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permits, licences, and the intelligence they generate : Civic Ledger position</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDEEE9;
+  --paper-2:#E4E6DF;
+  --paper-3:#D9DCD3;
+  --ink:#14201D;
+  --ink-soft:#4C574F;
+  --ink-faint:#78827A;
+  --stamp:#4E3A8C;
+  --stamp-wash:rgba(78,58,140,.09);
+  --stamp-line:rgba(78,58,140,.32);
+  --carbon-blue:#9DB6C8;
+  --carbon-pink:#DDB2AC;
+  --carbon-green:#AFC5A8;
+  --rule:#C3C7BC;
+  --rule-soft:#D5D8CE;
+  --green:#2C6349;
+  --amber:#8A6A16;
+  --maxw:1080px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Newsreader',Georgia,serif;
+  font-size:18px;
+  line-height:1.62;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(20,32,29,.014) 0 1px,transparent 1px 3px);
+}
+h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;line-height:1.06;margin:0;letter-spacing:-.02em;}
+p{margin:0 0 1em;}
+a{color:var(--stamp);text-decoration:none;border-bottom:1px solid var(--stamp-line);}
+a:hover{background:var(--stamp-wash);}
+:focus-visible{outline:2.5px solid var(--stamp);outline-offset:3px;}
+
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+/* ---------- sticky bar ---------- */
+.bar{
+  position:sticky;top:0;z-index:60;
+  background:rgba(237,238,233,.93);
+  backdrop-filter:blur(9px);
+  border-bottom:1px solid var(--rule);
+}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:9px 28px;display:flex;align-items:center;gap:18px;justify-content:space-between;}
+.bar-id{color:var(--ink-faint);}
+.bar-id b{color:var(--ink);font-weight:600;}
+.toggle{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;border:1px solid var(--stamp-line);padding:5px 11px;border-radius:2px;background:transparent;color:var(--stamp);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;}
+.toggle:hover{background:var(--stamp-wash);}
+.sw{width:26px;height:13px;border:1px solid var(--stamp-line);border-radius:9px;position:relative;flex:none;}
+.sw::after{content:"";position:absolute;top:1px;left:1px;width:9px;height:9px;border-radius:50%;background:var(--stamp-line);transition:.22s;}
+body.reveal .sw{background:var(--stamp-wash);}
+body.reveal .sw::after{left:14px;background:var(--stamp);}
+
+/* ---------- hero ---------- */
+.hero{padding:74px 0 56px;border-bottom:2px solid var(--ink);}
+.hero .eyebrow{color:var(--ink-faint);margin-bottom:26px;}
+.hero h1{font-size:clamp(38px,7.2vw,80px);font-weight:800;letter-spacing:-.035em;max-width:15ch;}
+.hero h1 em{font-style:normal;color:var(--stamp);}
+.thesis{
+  margin-top:38px;max-width:60ch;font-size:clamp(19px,2.3vw,24px);line-height:1.5;color:var(--ink);
+  border-left:3px solid var(--stamp);padding-left:20px;
+}
+.hero-meta{margin-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.hm{background:var(--paper);padding:13px 15px;}
+.hm .k{color:var(--ink-faint);display:block;margin-bottom:5px;}
+.hm .v{font-size:15px;line-height:1.35;}
+
+/* ---------- sections ---------- */
+section{padding:62px 0;border-bottom:1px solid var(--rule);scroll-margin-top:58px;}
+.sechead{display:flex;gap:20px;align-items:baseline;margin-bottom:14px;flex-wrap:wrap;}
+.secno{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--stamp);letter-spacing:.1em;padding-top:6px;flex:none;}
+section h2{font-size:clamp(26px,4vw,42px);letter-spacing:-.028em;max-width:20ch;}
+.standfirst{max-width:64ch;font-size:19px;color:var(--ink-soft);margin:16px 0 34px;}
+.body-col{max-width:64ch;}
+
+/* ---------- claim stamps ---------- */
+.claim{position:relative;border-left:2px solid var(--rule-soft);padding-left:16px;margin:22px 0;transition:.25s;}
+.claim .tag{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;padding:2px 7px;border:1px solid currentColor;border-radius:1px;margin-bottom:7px;}
+.claim[data-s="confirmed"] .tag{color:var(--green);}
+.claim[data-s="assumption"] .tag{color:var(--stamp);}
+.claim[data-s="open"] .tag{color:var(--amber);}
+.claim p:last-child{margin-bottom:0;}
+body.reveal .claim[data-s="assumption"]{border-left-color:var(--stamp);background:var(--stamp-wash);padding:12px 16px;margin-left:-0px;}
+body.reveal .claim[data-s="open"]{border-left-color:var(--amber);}
+
+/* ---------- OECD bars ---------- */
+.oecd{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start;margin-top:8px;}
+.pyr{display:flex;flex-direction:column;gap:3px;}
+.pyr-row{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch;}
+.pyr-l{background:var(--paper-2);border:1px solid var(--rule);padding:9px 12px;font-size:14px;line-height:1.3;display:flex;align-items:center;}
+.pyr-mid{width:5px;background:var(--stamp);opacity:.18;}
+.pyr-r{background:transparent;border:1px dashed var(--stamp-line);padding:9px 12px;font-size:14px;line-height:1.3;display:flex;align-items:center;color:var(--stamp);}
+.pyr-cap{margin-top:12px;}
+
+/* ---------- permit vs licence cards ---------- */
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin:12px 0 6px;}
+.doc{background:#F4F5F0;border:1px solid var(--ink);position:relative;padding:0;box-shadow:5px 5px 0 var(--paper-3);}
+.doc.lic{box-shadow:5px 5px 0 var(--carbon-blue);}
+.doc-top{border-bottom:1px solid var(--ink);padding:11px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.doc-top .t{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.02em;}
+.doc-body{padding:16px 18px 20px;}
+.doc-q{font-size:17px;font-style:italic;color:var(--stamp);margin-bottom:14px;line-height:1.4;}
+.fields{border-top:1px solid var(--rule-soft);}
+.f{display:grid;grid-template-columns:82px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule-soft);font-size:14.5px;line-height:1.35;}
+.f .fk{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);padding-top:3px;}
+.doc-eg{margin-top:14px;padding-top:12px;border-top:1px dashed var(--rule);font-size:14.5px;line-height:1.45;}
+.doc-eg b{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:5px;font-weight:500;}
+
+.sobut{margin-top:30px;background:var(--ink);color:var(--paper);padding:24px 26px;max-width:none;}
+.sobut .mono{color:var(--carbon-blue);display:block;margin-bottom:9px;}
+.sobut p{margin:0;font-size:19px;line-height:1.5;max-width:70ch;}
+.sobut b{color:#fff;font-weight:600;}
+
+/* ---------- asset families ---------- */
+.fam{margin-top:14px;}
+.fam-h{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:6px;margin:30px 0 0;}
+.fam-h .n{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:19px;letter-spacing:-.02em;}
+.fam-h .d{font-size:14.5px;color:var(--ink-soft);}
+.assets{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--rule);border-left:1px solid var(--rule);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.as{background:var(--paper);padding:15px 16px 17px;}
+.as .num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--stamp);letter-spacing:.1em;font-weight:600;}
+.as h4{font-size:17px;margin:5px 0 7px;letter-spacing:-.015em;}
+.as p{font-size:14.5px;line-height:1.45;color:var(--ink-soft);margin:0 0 9px;}
+.as .who{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-faint);border-top:1px dotted var(--rule);padding-top:8px;line-height:1.5;}
+.as .who i{font-style:normal;color:var(--stamp);}
+.as.new{background:#F4F2F8;}
+.as.new::after{content:"proposed addition";display:block;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--stamp);}
+
+@media(max-width:820px){
+  .oecd,.docs{grid-template-columns:1fr;gap:22px;}
+  section{padding:46px 0;}
+  .hero{padding:52px 0 42px;}
+  body{font-size:17px;}
+  .wrap{padding:0 20px;}
+  .bar-in{padding:8px 20px;gap:10px;}
+  .bar-id{display:none;}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}html{scroll-behavior:auto;}}
+/* ---------- chain diagram ---------- */
+.chain{margin:10px 0 0;border:1px solid var(--ink);background:#F4F5F0;}
+.chain-row{display:grid;grid-template-columns:132px 1fr;border-bottom:1px solid var(--rule);}
+.chain-row:last-child{border-bottom:none;}
+.chain-lab{background:var(--paper-2);border-right:1px solid var(--rule);padding:14px 13px;display:flex;flex-direction:column;justify-content:center;gap:4px;}
+.chain-lab .z{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-faint);}
+.chain-lab .n{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:15px;line-height:1.15;letter-spacing:-.015em;}
+.chain-c{padding:14px 18px;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;}
+.chain-c p{margin:0;font-size:15px;line-height:1.45;flex:1 1 260px;min-width:0;}
+.pill{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;padding:4px 9px;border-radius:99px;white-space:nowrap;font-weight:500;}
+.pill.local{background:var(--carbon-blue);color:#16303F;}
+.pill.commons{background:var(--carbon-green);color:#1D3318;}
+.pill.owned{background:var(--stamp);color:#fff;}
+.chain-row.r1{background:#EFF3F5;}
+.chain-row.r4,.chain-row.r5{background:#F2F0F7;}
+
+/* ---------- commons block ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start;}
+.bigq{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(21px,3vw,29px);line-height:1.18;letter-spacing:-.025em;margin:0 0 18px;}
+.answer{background:var(--stamp);color:#fff;padding:26px 28px;}
+.answer .mono{color:var(--carbon-blue);display:block;margin-bottom:11px;}
+.answer p{font-size:19px;line-height:1.48;margin:0 0 12px;}
+.answer p:last-child{margin:0;}
+.answer b{font-weight:600;}
+
+/* ---------- carbon licence layers ---------- */
+.carbons{margin-top:12px;display:flex;flex-direction:column;gap:16px;}
+.carbon{border:1px solid var(--ink);position:relative;padding:0;background:#F4F5F0;}
+.carbon.l1{box-shadow:6px 6px 0 var(--carbon-green);}
+.carbon.l2{box-shadow:6px 6px 0 var(--carbon-blue);}
+.carbon.l3{box-shadow:6px 6px 0 var(--carbon-pink);}
+.carbon-h{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--ink);padding:12px 20px;}
+.carbon-h h3{font-size:21px;letter-spacing:-.022em;}
+.carbon-h .mode{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;}
+.carbon.l1 .mode{color:var(--green);}
+.carbon.l2 .mode{color:var(--stamp);}
+.carbon.l3 .mode{color:#8A4230;}
+.carbon-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:1px;background:var(--rule-soft);}
+.cg{background:#F4F5F0;padding:12px 16px 14px;}
+.cg .k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:5px;}
+.cg .v{font-size:14.5px;line-height:1.42;}
+.carbon-note{padding:12px 20px 16px;border-top:1px dashed var(--rule);font-size:15px;line-height:1.5;}
+.carbon-note b{color:var(--stamp);font-weight:600;}
+
+/* ---------- lawyer answer ---------- */
+.quotebox{border:2px solid var(--ink);padding:22px 26px;margin-bottom:32px;background:#F4F5F0;}
+.quotebox p{font-size:clamp(18px,2.4vw,23px);line-height:1.42;font-style:italic;margin:0 0 10px;}
+.quotebox .attr{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin:0;font-style:normal;}
+.steps{counter-reset:st;display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.st{background:var(--paper);padding:16px 20px;display:grid;grid-template-columns:34px 1fr;gap:16px;align-items:start;}
+.st::before{counter-increment:st;content:counter(st);font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:#fff;background:var(--stamp);width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;margin-top:2px;}
+.st h4{font-size:17px;margin:0 0 5px;letter-spacing:-.015em;}
+.st p{margin:0;font-size:15.5px;line-height:1.48;color:var(--ink-soft);}
+.st p b{color:var(--ink);font-weight:600;}
+
+/* ---------- typology explorer ---------- */
+.tabs{display:flex;gap:0;flex-wrap:wrap;border-bottom:2px solid var(--ink);margin-top:8px;}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;font-weight:500;padding:11px 16px;background:transparent;border:1px solid var(--rule);border-bottom:none;cursor:pointer;color:var(--ink-soft);margin-right:4px;border-radius:2px 2px 0 0;}
+.tab:hover{background:var(--paper-2);}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.panel{display:none;border:1px solid var(--ink);border-top:none;background:#F4F5F0;}
+.panel.on{display:block;}
+.panel-h{padding:18px 22px 14px;border-bottom:1px solid var(--rule);}
+.panel-h .kind{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;font-weight:600;color:var(--stamp);display:block;margin-bottom:6px;}
+.panel-h h3{font-size:22px;letter-spacing:-.022em;margin-bottom:8px;}
+.panel-h p{margin:0;font-size:16px;line-height:1.5;color:var(--ink-soft);max-width:66ch;}
+.panel-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--rule-soft);}
+.pg{background:#F4F5F0;padding:14px 18px 16px;}
+.pg .k{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:6px;}
+.pg .v{font-size:15px;line-height:1.45;}
+.pg .v em{font-style:normal;color:var(--stamp);}
+
+/* ---------- open questions ---------- */
+.qs{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:10px;}
+.q{background:var(--paper);padding:17px 20px;}
+.q .qh{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:7px;}
+.q .qn{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--amber);letter-spacing:.09em;}
+.q h4{font-size:18px;letter-spacing:-.018em;}
+.q p{margin:0;font-size:15.5px;line-height:1.5;color:var(--ink-soft);max-width:76ch;}
+.q .owner{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-top:9px;}
+
+/* ---------- companion docs ---------- */
+.docs3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;margin-top:12px;}
+.d3{border:1px solid var(--ink);background:#F4F5F0;padding:18px 20px 20px;display:flex;flex-direction:column;gap:9px;box-shadow:4px 4px 0 var(--paper-3);}
+.d3 .n{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--stamp);font-weight:600;}
+.d3 h4{font-size:18px;letter-spacing:-.02em;}
+.d3 p{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink-soft);}
+.d3 .rd{font-size:14.5px;line-height:1.45;border-top:1px dashed var(--rule);padding-top:9px;margin-top:auto;}
+.d3 .rd b{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:4px;font-weight:500;}
+.d3.self{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.d3.self p,.d3.self .rd{color:#C8CFC9;}
+.d3.self .n{color:var(--carbon-blue);}
+.d3.self .rd b{color:var(--carbon-blue);}
+
+footer{padding:46px 0 60px;}
+.foot{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--ink-faint);}
+
+@media(max-width:820px){
+  .split{grid-template-columns:1fr;gap:22px;}
+  .chain-row{grid-template-columns:1fr;}
+  .chain-lab{border-right:none;border-bottom:1px solid var(--rule);flex-direction:row;align-items:baseline;gap:10px;}
+  .tab{flex:1 1 auto;text-align:center;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="mono bar-id"><b>Civic Ledger</b> &nbsp;/&nbsp; Permits, licences and intelligence &nbsp;/&nbsp; v1 draft</div>
+    <button class="toggle" id="tg" aria-pressed="false"><span class="sw"></span> Show what is assumed</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="mono eyebrow">Civic Ledger · Dark Matter Labs · Position for the Berlin gathering, 3 to 7 August 2026</div>
+    <h1>Keep the record open. Charge for <em>conformance</em> to it.</h1>
+    <div class="thesis">
+      Civic Ledger's working position on permits, licences, and what the platform should hold. Written to be argued with. Every claim is marked confirmed, assumed, or open, so you can see where we are guessing and tell us where we have it wrong.
+    </div>
+    <div class="hero-meta">
+      <div class="hm"><span class="k mono">Document</span><span class="v">Working position, v1</span></div>
+      <div class="hm"><span class="k mono">Status</span><span class="v">Draft for stress-testing</span></div>
+      <div class="hm"><span class="k mono">Decision deadline</span><span class="v">R&amp;D funding ends Dec 2026</span></div>
+      <div class="hm"><span class="k mono">What we want</span><span class="v">The parts you think are wrong</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="s1">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§01</span><h2>Regulators have already described the problem</h2></div>
+    <p class="standfirst">We open with a structural problem that a body of regulators has independently described. The OECD published it in November 2025, which means the ground under this position is shared rather than ours alone.</p>
+    <div class="oecd">
+      <div class="body-col">
+        <div class="claim" data-s="confirmed">
+          <span class="tag">Confirmed · OECD 2025</span>
+          <p>Licensing and permitting are among the most widely used regulatory tools, and their core purpose is to manage risk before it materialises. When they are overused, fragmented or slow, they create unnecessary cost, delay projects, and weaken a government's ability to act.</p>
+        </div>
+        <div class="claim" data-s="confirmed">
+          <span class="tag">Confirmed · OECD 2025</span>
+          <p>In more than half of OECD members, enforcement authorities apply no risk criteria at all when targeting inspection and monitoring. Resource goes to low-impact activity while serious risk goes unchecked.</p>
+        </div>
+        <div class="claim" data-s="confirmed">
+          <span class="tag">Confirmed · OECD 2025</span>
+          <p>The OECD's recommended answer is a risk-proportionate ladder: do nothing, notify, notify with assessment, light authorisation, full authorisation. Requirements should sit at the rung the risk deserves.</p>
+        </div>
+        <div class="claim" data-s="assumption">
+          <span class="tag">Our assumption</span>
+          <p>The ladder sorts activity by how much scrutiny it deserves, and that shape is right. It leaves one question open: what is the permission meant to grow? A system tuned to downside alone can manage risk well and still leave capability undistributed.</p>
+        </div>
+      </div>
+      <div>
+        <div class="mono" style="color:var(--ink-faint);margin-bottom:10px;">OECD ladder (left) · what Civic Ledger adds (right)</div>
+        <div class="pyr">
+          <div class="pyr-row"><div class="pyr-l"><b>Full authorisation</b></div><div class="pyr-mid"></div><div class="pyr-r">Human review, full negotiation</div></div>
+          <div class="pyr-row"><div class="pyr-l">Lighter authorisation</div><div class="pyr-mid"></div><div class="pyr-r">Conditional negotiation</div></div>
+          <div class="pyr-row"><div class="pyr-l">Notification with assessment</div><div class="pyr-mid"></div><div class="pyr-r">Auto-routed with attached conditions</div></div>
+          <div class="pyr-row"><div class="pyr-l">Notification</div><div class="pyr-mid"></div><div class="pyr-r">Pre-authorised, logged</div></div>
+          <div class="pyr-row"><div class="pyr-l">Do nothing</div><div class="pyr-mid"></div><div class="pyr-r">Pre-authorised, no friction</div></div>
+        </div>
+        <p class="mono pyr-cap" style="color:var(--ink-faint);line-height:1.7;">The rungs already exist in law. Civic Ledger works out which rung a request belongs on, records why, and moves it when the evidence changes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§02</span><h2>Permit and licence do different work, and that difference is our whole product</h2></div>
+    <p class="standfirst">A permit clears an event. A licence creates an ongoing capability. Civic Ledger works across both and earns differently from each, so this distinction shapes the commercial model as much as the legal one.</p>
+    <div class="docs">
+      <div class="doc">
+        <div class="doc-top"><span class="t">Permit</span><span class="mono" style="color:var(--ink-faint)">one-off</span></div>
+        <div class="doc-body">
+          <div class="doc-q">Can this happen here, at this time, under these conditions?</div>
+          <div class="fields">
+            <div class="f"><span class="fk">Attaches to</span><span>An activity in a place</span></div>
+            <div class="f"><span class="fk">Duration</span><span>Time-limited, often single use</span></div>
+            <div class="f"><span class="fk">Tests</span><span>Risk of this instance</span></div>
+            <div class="f"><span class="fk">Ends by</span><span>Expiry</span></div>
+          </div>
+          <div class="doc-eg"><b>Live case</b>A run club occupies a street on Saturday morning. Berlin calls this special use. The question is whether this route, this hour, this crowd is safe.</div>
+        </div>
+      </div>
+      <div class="doc lic">
+        <div class="doc-top"><span class="t">Licence</span><span class="mono" style="color:var(--ink-faint)">ongoing</span></div>
+        <div class="doc-body">
+          <div class="doc-q">Is this actor authorised to hold this capability over time?</div>
+          <div class="fields">
+            <div class="f"><span class="fk">Attaches to</span><span>A person or organisation</span></div>
+            <div class="f"><span class="fk">Duration</span><span>Renewable, continuing</span></div>
+            <div class="f"><span class="fk">Tests</span><span>Standing and track record</span></div>
+            <div class="f"><span class="fk">Ends by</span><span>Revocation or non-renewal</span></div>
+          </div>
+          <div class="doc-eg"><b>Live case</b>A rooftop growing collective cares for a car park roof for three years. The question is whether this group can be trusted to hold that duty, and what happens when it fails.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="body-col" style="margin-top:30px;">
+      <div class="claim" data-s="assumption">
+        <span class="tag">Our position</span>
+        <p>Both instruments remain legal facts issued by authorities, and Civic Ledger keeps them that way. What we change sits in the middle. A permit carries conditions with the reasons attached, so the next request can cite the last one. A licence becomes a living commitment that tightens or loosens as compliance accumulates.</p>
+      </div>
+      <div class="claim" data-s="assumption">
+        <span class="tag">Our position</span>
+        <p>The distinction is commercially load-bearing. Permits generate volume: many small events, thin data, transaction economics. Licences generate depth: long relationships, compliance history, the reputation record. Volume builds the conditions library. Depth builds the trust signal. Both matter, and each runs on its own economics.</p>
+      </div>
+    </div>
+
+    <div class="sobut">
+      <span class="mono">So what</span>
+      <p>Any pricing model that treats a one-day picnic permit and a three-year stewardship licence as one unit of sale will misprice both. <b>Permits should be near-free and high-volume. Licences should carry the fee.</b> That is our first concrete commercial claim, and it falls directly out of the legal distinction.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§03</span><h2>Eight assets, four families</h2></div>
+    <p class="standfirst">Every negotiated permission leaves something behind. Some of it accrues through use, some we design, some accumulates slowly as authority, and one is a product we sell. Sorting them into four families is what stops the asset conversation going in circles.</p>
+
+    <div class="fam">
+      <div class="fam-h"><span class="n">Family A · Generated by use</span><span class="d">Accrues automatically through use. We host the conditions that produce it.</span></div>
+      <div class="assets">
+        <div class="as">
+          <div class="num">A1</div><h4>Conditions library</h4>
+          <p>Every tested condition attached to a permission: noise caps, hours, insurance thresholds, access duties, what was tried and what held.</p>
+          <div class="who">Holds the <i>what</i></div>
+        </div>
+        <div class="as">
+          <div class="num">A2</div><h4>Reputation ledger</h4>
+          <p>Compliance history per actor. Whether the run club cleared the street. Whether the collective kept the roof safe. Feeds future routing.</p>
+          <div class="who">Holds the <i>who</i></div>
+        </div>
+        <div class="as new">
+          <div class="num">A3</div><h4>Precedent and reasoning record</h4>
+          <p>Why a condition was attached in a given case, which objection produced it, and what the trade-off was. The argument behind the terms, kept alongside them.</p>
+          <div class="who">Holds the <i>why</i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fam">
+      <div class="fam-h"><span class="n">Family B · Designed and held</span><span class="d">Built deliberately by us. This is where the protocol lives.</span></div>
+      <div class="assets">
+        <div class="as">
+          <div class="num">B1</div><h4>Protocol licence</h4>
+          <p>The right to deploy the permissioning engine: business logic, risk routing, admin tools, playbook. Each operating company pays to run on it.</p>
+          <div class="who">Held by <i>DML KR</i></div>
+        </div>
+        <div class="as new">
+          <div class="num">B2</div><h4>Negotiation method</h4>
+          <p>The structured way a contested permission gets resolved: who is convened, in what order, how objections become conditions. Transferable without the software.</p>
+          <div class="who">Held by <i>DML KR</i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fam">
+      <div class="fam-h"><span class="n">Family C · Earned authority</span><span class="d">Cannot be built or bought. Accumulates only through use over years.</span></div>
+      <div class="assets">
+        <div class="as">
+          <div class="num">C1</div><h4>Civic standard</h4>
+          <p>The defensible statement of how a good permission decision is made, derived from thousands of real ones. This is what a regulator can point at.</p>
+          <div class="who">The <i>Gore-Tex</i> asset</div>
+        </div>
+        <div class="as new">
+          <div class="num">C2</div><h4>Trust mark</h4>
+          <p>The visible sign that a permission was issued through a conforming process. What makes the standard legible to a citizen, an insurer, or a court.</p>
+          <div class="who">The <i>revenue surface</i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fam">
+      <div class="fam-h"><span class="n">Family D · Derived product</span><span class="d">Made from A, sold under terms set by C.</span></div>
+      <div class="assets">
+        <div class="as">
+          <div class="num">D1</div><h4>Policy intelligence</h4>
+          <p>Analysis sold to governments, insurers and researchers: which conditions fail, which neighbourhoods face most friction, where risk rules are disproportionate.</p>
+          <div class="who">Sold <i>B2B</i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="body-col" style="margin-top:30px;">
+      <div class="claim" data-s="assumption">
+        <span class="tag">Why three were missing</span>
+        <p>A3, B2 and C2 were absent from the earlier list, and their absence explains a lot of the confusion. The reasoning record (A3) gives the civic standard an evidence base it can defend under challenge. The method (B2) is what lets us offer more than software, which is the shift mySociety took ten years to make. The trust mark (C2) gives the standard a surface to charge for.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§04</span><h2>Where the data actually turns into a licence</h2></div>
+    <p class="standfirst">This is the chain we have been circling. The asset is the decision pattern, and it sits several layers above the raw data. Reading upwards shows where ownership changes hands, and it lands higher than most people expect.</p>
+
+    <div class="chain">
+      <div class="chain-row r1">
+        <div class="chain-lab"><span class="z">Layer 1</span><span class="n">Raw input</span></div>
+        <div class="chain-c">
+          <p>Noise readings, traffic counts, ecological sensors, land records, incident reports. Held by cities, agencies and residents.</p>
+          <span class="pill local">stays with the city</span>
+        </div>
+      </div>
+      <div class="chain-row r2">
+        <div class="chain-lab"><span class="z">Layer 2</span><span class="n">Routing</span></div>
+        <div class="chain-c">
+          <p>Input determines which rung of the OECD ladder a request lands on, and therefore whether it needs a permit, a licence, or nothing at all.</p>
+          <span class="pill local">stays with the city</span>
+        </div>
+      </div>
+      <div class="chain-row r3">
+        <div class="chain-lab"><span class="z">Layer 3</span><span class="n">Conditions and reasons</span></div>
+        <div class="chain-c">
+          <p>The negotiated terms, and the argument that produced them. This is where the platform starts generating something that did not exist before.</p>
+          <span class="pill commons">commons</span>
+        </div>
+      </div>
+      <div class="chain-row r4">
+        <div class="chain-lab"><span class="z">Layer 4</span><span class="n">Decision pattern</span></div>
+        <div class="chain-c">
+          <p>Aggregated across thousands of cases and three countries: which conditions hold, which fail, which are disproportionate to their risk.</p>
+          <span class="pill commons">commons</span>
+        </div>
+      </div>
+      <div class="chain-row r5">
+        <div class="chain-lab"><span class="z">Layer 5</span><span class="n">Standard and mark</span></div>
+        <div class="chain-c">
+          <p>The defensible claim that a process meets the pattern, and the mark that makes the claim visible to a citizen, an insurer or a court.</p>
+          <span class="pill owned">held by DML KR</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="body-col" style="margin-top:28px;">
+      <div class="claim" data-s="assumption">
+        <span class="tag">The consequence</span>
+        <p>Ownership of layers 1 and 2 is politically expensive and legally fragile, so we should say plainly that we are not seeking it. Ownership at layer 5 is cheap to defend and hard to copy, because it rests on a record no one else has spent three years accumulating.</p>
+      </div>
+      <div class="claim" data-s="open">
+        <span class="tag">Open · resolve before December</span>
+        <p>Layers 3 and 4 sit in a grey zone. Conditions are generated through city operation, on city assets, by city officers using our engine. The operating agreements with Incheon, London and Melbourne need to say explicitly who holds them, because the standard rests on that answer being written down.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§05</span><h2>Rules as commons, and the trap inside that idea</h2></div>
+    <p class="standfirst">The commitment is real: the intelligence this platform generates belongs in a commons rather than in private hands. Stated on its own, that commitment removes our revenue, and we should be honest that it does.</p>
+    <div class="split">
+      <div>
+        <div class="claim" data-s="confirmed">
+          <span class="tag">Confirmed · our position</span>
+          <p>Platforms that gather performance data typically hold the resulting intelligence, building knowledge asymmetry over the people who generated it. We are refusing that move. Rules are a byproduct of civic negotiation, and they belong in common hands.</p>
+        </div>
+        <div class="claim" data-s="confirmed">
+          <span class="tag">Confirmed · Decidim</span>
+          <p>Decidim protects its commons with a copyleft licence rather than ownership, and asks partners to return roughly three per cent of related revenue. It works at scale. It also rests on trust rather than enforceability, and Decidim remains almost wholly dependent on one city.</p>
+        </div>
+        <div class="bigq">If rules are common property, what exactly are we selling?</div>
+      </div>
+      <div class="answer">
+        <span class="mono">Our answer</span>
+        <p>Open the record. <b>Charge for conformance to it.</b></p>
+        <p>The conditions library, the reputation aggregates and the reasoning record are open. Anyone may read them, fork them, build on them. That openness is what makes the pattern they produce credible.</p>
+        <p>The scarce thing is the right to say <b>this decision was made to the standard</b>, and to carry the mark that proves it. Gore earns its revenue from the tag.</p>
+      </div>
+    </div>
+
+    <div class="body-col" style="margin-top:28px;">
+      <div class="claim" data-s="assumption">
+        <span class="tag">Where we improve on Decidim</span>
+        <p>We make reciprocity a condition of the licence rather than a handshake. Anyone using the conditions commons at non-commercial scale pays nothing. Anyone deriving commercial revenue contributes a defined share back, with the obligation written into the licence text where it can be enforced.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§06</span><h2>Three licences, three layers, three different jobs</h2></div>
+    <p class="standfirst">Three instruments, because the engine, the record and the authority pull in opposite directions. The engine needs control, the record needs openness, the authority needs scarcity. Covering all three with one instrument is why the design keeps stalling.</p>
+
+    <div class="carbons">
+      <div class="carbon l1">
+        <div class="carbon-h"><h3>Conditions commons licence</h3><span class="mode">open · reciprocal</span></div>
+        <div class="carbon-g">
+          <div class="cg"><span class="k">Covers</span><span class="v">Conditions library, reputation aggregates, precedent and reasoning record</span></div>
+          <div class="cg"><span class="k">Who may use</span><span class="v">Anyone. Cities, researchers, rival platforms, community groups</span></div>
+          <div class="cg"><span class="k">Price</span><span class="v">Free at non-commercial scale</span></div>
+          <div class="cg"><span class="k">Condition</span><span class="v">Derivatives return under the same terms. Commercial use triggers a defined contribution</span></div>
+        </div>
+        <div class="carbon-note">This layer earns almost nothing directly, by design. Its job is to make the record large, trusted and unforkable in practice, because forking it means giving up the shared pattern that gives it worth. <b>The commons is the moat.</b></div>
+      </div>
+
+      <div class="carbon l2">
+        <div class="carbon-h"><h3>Protocol licence</h3><span class="mode">closed · paid</span></div>
+        <div class="carbon-g">
+          <div class="cg"><span class="k">Covers</span><span class="v">Permissioning engine, risk routing logic, admin tools, negotiation method, playbook, brand</span></div>
+          <div class="cg"><span class="k">Who may use</span><span class="v">Operating companies deploying the platform: Korea now, London and Melbourne next</span></div>
+          <div class="cg"><span class="k">Price</span><span class="v">Licence fee plus stewardship fee per operating company</span></div>
+          <div class="cg"><span class="k">Condition</span><span class="v">Conformance to the standard. Contribution of conditions back to the commons</span></div>
+        </div>
+        <div class="carbon-note">This is the documented revenue line, already described in the operating architecture. <b>Note the tie:</b> the protocol licence is what obliges each operating company to feed the commons. That clause is what keeps the commons growing once others operate the platform.</div>
+      </div>
+
+      <div class="carbon l3">
+        <div class="carbon-h"><h3>Civic standard licence</h3><span class="mode">certification · paid</span></div>
+        <div class="carbon-g">
+          <div class="cg"><span class="k">Covers</span><span class="v">The right to claim conformance and display the trust mark</span></div>
+          <div class="cg"><span class="k">Who may use</span><span class="v">Anyone, including platforms that never touch our software: city systems, insurers, other vendors</span></div>
+          <div class="cg"><span class="k">Price</span><span class="v">Certification fee, likely banded by population or transaction volume</span></div>
+          <div class="cg"><span class="k">Condition</span><span class="v">Audit against the standard. Renewable. Revocable on failure</span></div>
+        </div>
+        <div class="carbon-note">This is the growth line and the one we have yet to build. <b>It is also the only asset that scales beyond our own deployments,</b> because a city can conform without ever running our code. That is the difference between a product company and a standards body.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§07</span><h2>The answer to the lawyer</h2></div>
+    <div class="quotebox">
+      <p>"We cannot design any licence until we know your business logic, because the licence is just the mechanism to capture the value. If you do not have the business logic, we cannot design the licence."</p>
+      <p class="attr">Legal counsel, reported to the team, July 2026</p>
+    </div>
+    <p class="standfirst">He is right, and this document exists to remove the blocker. Here is the business logic in five steps, so the licence design has something to follow.</p>
+    <div class="steps">
+      <div class="st"><div><h4>What we do</h4><p>We host the negotiation that turns a request into a permission with conditions attached, across permits and licences, in three countries.</p></div></div>
+      <div class="st"><div><h4>What that leaves behind</h4><p>The only accumulated record of how civic permission decisions are actually made, why conditions were set, and whether they held. <b>No one else is building this.</b></p></div></div>
+      <div class="st"><div><h4>Why it stays open</h4><p>The record is credible because it is open and contestable. Enclosing it would remove the credibility that gives it worth, and break our commitment to the cities that generated it.</p></div></div>
+      <div class="st"><div><h4>Where the value concentrates</h4><p>In the authority the record confers: the defensible standard for a good permission decision, and the mark that proves conformance. <b>Scarcity sits at the authority layer.</b></p></div></div>
+      <div class="st"><div><h4>What the licence must therefore do</h4><p>Three instruments. Keep the record open and reciprocal. Charge operating companies to run the engine and oblige them to feed the record. Charge anyone, including those who never touch our software, for the right to claim conformance.</p></div></div>
+    </div>
+    <div class="body-col" style="margin-top:28px;">
+      <div class="claim" data-s="assumption">
+        <span class="tag">What counsel can now be asked</span>
+        <p>Counsel can now be given three bounded questions. Can a reciprocity obligation on commercial re-use be drafted enforceably in Korean, German and English law? Can conditions generated on city assets be held by DML KR, and where they cannot, what structure holds them instead? Can a certification mark be registered and defended while the standard is still being documented?</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§08</span><h2>Four live cases, four different instruments</h2></div>
+    <p class="standfirst">The test of a position is whether it survives contact with real requests. Select a case to see which instrument applies, what Civic Ledger changes, and what it earns.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="p1" id="t1">Nightclub daytime</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p2" id="t2">Run club</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p3" id="t3">River restoration</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="p4" id="t4">Rooftop growing</button>
+    </div>
+
+    <div class="panel on" id="p1" role="tabpanel" aria-labelledby="t1">
+      <div class="panel-h">
+        <span class="kind">Permit, repeated · Berlin special use</span>
+        <h3>A club sits empty sixty hours a week</h3>
+        <p>The room exists, the licence to operate exists, the daytime demand exists. What is missing is a cheap way to authorise a different use of the same space between Tuesday and Thursday.</p>
+      </div>
+      <div class="panel-g">
+        <div class="pg"><span class="k">Instrument</span><span class="v">A permit each time, or a standing licence variation covering a class of daytime use</span></div>
+        <div class="pg"><span class="k">The friction</span><span class="v">Each daytime use is treated as a fresh special-use application, priced and assessed as if nothing was learned last time</span></div>
+        <div class="pg"><span class="k">What we change</span><span class="v"><em>Precedent.</em> The fifth request cites the first four. Conditions that held become the default, and the rung drops from full authorisation to notification</span></div>
+        <div class="pg"><span class="k">What we earn</span><span class="v">Volume conditions data. Thin per transaction, valuable in aggregate</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
+      <div class="panel-h">
+        <span class="kind">Permit · low risk, high frequency</span>
+        <h3>Forty people run through a street every Saturday</h3>
+        <p>Risk is low and well understood, so under the OECD ladder this belongs near the bottom rung. In practice it often triggers the same process as a street festival.</p>
+      </div>
+      <div class="panel-g">
+        <div class="pg"><span class="k">Instrument</span><span class="v">Permit, or notification only once the pattern is established</span></div>
+        <div class="pg"><span class="k">The friction</span><span class="v">Process cost exceeds the risk being managed. The OECD names this exact failure: authorisation used where lighter tools would work better</span></div>
+        <div class="pg"><span class="k">What we change</span><span class="v"><em>Reputation.</em> After six clean occurrences the group's record moves the request down the ladder automatically, with the reason logged</span></div>
+        <div class="pg"><span class="k">What we earn</span><span class="v">The reputation ledger. This is the case that proves the trust signal works</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="p3" role="tabpanel" aria-labelledby="t3" hidden>
+      <div class="panel-h">
+        <span class="kind">Licence · multi-party, long duration</span>
+        <h3>A group wants standing to act on a river</h3>
+        <p>Testing water, installing sensors, submitting evidence, and requiring a response. This is a capability held over years, against parties with more power than the group has.</p>
+      </div>
+      <div class="panel-g">
+        <div class="pg"><span class="k">Instrument</span><span class="v">Licence. Only a licence can carry standing, duty and a right to trigger review</span></div>
+        <div class="pg"><span class="k">The friction</span><span class="v">No existing instrument couples the capability to monitor with the right to compel a response. Groups gather evidence and nothing happens</span></div>
+        <div class="pg"><span class="k">What we change</span><span class="v"><em>Response triggers.</em> Evidence meeting a defined threshold creates a logged obligation on a named duty-holder, with the clock visible to everyone</span></div>
+        <div class="pg"><span class="k">What we earn</span><span class="v">Policy intelligence, and the hardest evidence that the standard has teeth</span></div>
+      </div>
+    </div>
+
+    <div class="panel" id="p4" role="tabpanel" aria-labelledby="t4" hidden>
+      <div class="panel-h">
+        <span class="kind">Licence · stewardship</span>
+        <h3>A collective takes on a car park roof for three years</h3>
+        <p>Structural load, water, access, insurance, and what happens when half the group leaves in year two. The instrument has to survive the group changing.</p>
+      </div>
+      <div class="panel-g">
+        <div class="pg"><span class="k">Instrument</span><span class="v">Licence to occupy plus stewardship duties, with no exclusive possession, which keeps it short of a lease</span></div>
+        <div class="pg"><span class="k">The friction</span><span class="v">Owners default to refusal because the downside is legible while the upside stays vague. Nobody can price the group's reliability</span></div>
+        <div class="pg"><span class="k">What we change</span><span class="v"><em>Renegotiation.</em> The licence is a living premise. Conditions loosen as the record builds and tighten on failure, without returning to a blank application</span></div>
+        <div class="pg"><span class="k">What we earn</span><span class="v">The licence fee itself, and the case insurers will pay to understand</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§09</span><h2>What we cannot answer yet</h2></div>
+    <p class="standfirst">These are the questions we bring into the room. We are asking which parts of the position break, and where you would rebuild them differently.</p>
+    <div class="qs">
+      <div class="q">
+        <div class="qh"><span class="qn">Q1</span><h4>Who holds a condition generated on a city asset?</h4></div>
+        <p>City officers, using our engine, on public land, produce a condition. Our position places the derived pattern with the protocol holder and leaves the underlying record with the city. Whether that survives procurement law in all three jurisdictions is genuinely open.</p>
+        <div class="owner">For session 4 · Dr Till Kreutzer, Prof. Max von Grafenstein</div>
+      </div>
+      <div class="q">
+        <div class="qh"><span class="qn">Q2</span><h4>Can reciprocity be made enforceable?</h4></div>
+        <p>Decidim's three per cent works on trust and cannot be enforced. We want the obligation inside the licence. Whether a revenue-share condition attached to open data holds up in Korean, German and English law is a real question and we would value a straight answer.</p>
+        <div class="owner">For session 4 · legal and licensing participants</div>
+      </div>
+      <div class="q">
+        <div class="qh"><span class="qn">Q3</span><h4>Can a standard be certified before it is finished?</h4></div>
+        <p>The civic standard needs years of accumulated decisions to be defensible. The revenue needs the mark now. We are weighing registering the mark early and growing into it against waiting and losing those years.</p>
+        <div class="owner">For session 3 and session 4</div>
+      </div>
+      <div class="q">
+        <div class="qh"><span class="qn">Q4</span><h4>What stops London forking rather than paying?</h4></div>
+        <p>If the record is a commons and the code goes to GitHub in September, a well-resourced city could take both and pay no protocol fee. Our answer is that the mark and the standard are what they actually need. We would like that answer tested hard.</p>
+        <div class="owner">For session 3 · entity and business model</div>
+      </div>
+      <div class="q">
+        <div class="qh"><span class="qn">Q5</span><h4>Which entity can hold a mark on behalf of a commons?</h4></div>
+        <p>A certification mark held by a commercial operator reads as capture. Held by a body with no revenue, it becomes hard to defend. The steward-ownership structure has to solve this, and we have yet to test it against a lawyer.</p>
+        <div class="owner">For session 3 · Bradley Clark Royes, Jeannette Gusko</div>
+      </div>
+      <div class="q">
+        <div class="qh"><span class="qn">Q6</span><h4>Are permits really the loss leader?</h4></div>
+        <p>We claim permits should be near-free and licences should carry the fee. If cities will not pay licence fees at the level required, the whole shape inverts, and we would rather learn that before December.</p>
+        <div class="owner">For the public evening, 4 August</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="wrap">
+    <div class="sechead"><span class="secno">§10</span><h2>Read this alongside two others</h2></div>
+    <p class="standfirst">Three documents, one argument. This one sets the position. The other two show the money and the structure it depends on. This reading order works best.</p>
+    <div class="docs3">
+      <div class="d3 self">
+        <span class="n">Document one · you are here</span>
+        <h4>Permits, licences and intelligence</h4>
+        <p>What the platform should hold, what it should give away, and how the licence follows from that.</p>
+        <div class="rd"><b>Read for</b>The position, and the assumptions we would like challenged.</div>
+      </div>
+      <div class="d3">
+        <span class="n">Document two</span>
+        <h4>Where does value actually live?</h4>
+        <p>Four archetypes, airlines, Michelin, Gore-Tex and Stripe, and where Civic Ledger's assets sit against them.</p>
+        <div class="rd"><b>Read for</b>Why authority is the asset. <a href="https://aesthetic-liger-e0fba0.netlify.app/">Open</a></div>
+      </div>
+      <div class="d3">
+        <span class="n">Document three</span>
+        <h4>How money flows</h4>
+        <p>Entity diagrams for mySociety, Decidim and Library of Things, and the five-layer Civic Ledger operating architecture.</p>
+        <div class="rd"><b>Read for</b>The structure the licences must sit inside. <a href="https://gregarious-liger-2f5801.netlify.app/">Open</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="mono">Civic Ledger · Dark Matter Labs · Working position v1 · August 2026</div>
+    <div class="mono">Sources: OECD Best Practice Principles for Licensing and Permitting, November 2025</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tg=document.getElementById('tg');
+  tg.addEventListener('click',function(){
+    var on=document.body.classList.toggle('reveal');
+    tg.setAttribute('aria-pressed',on?'true':'false');
+    tg.lastChild.textContent=on?' Hide what is assumed':' Show what is assumed';
+  });
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){
+      tabs.forEach(function(o){
+        o.setAttribute('aria-selected','false');
+        var p=document.getElementById(o.getAttribute('aria-controls'));
+        p.classList.remove('on');p.hidden=true;
+      });
+      t.setAttribute('aria-selected','true');
+      var p=document.getElementById(t.getAttribute('aria-controls'));
+      p.classList.add('on');p.hidden=false;
+    });
+    t.addEventListener('keydown',function(e){
+      var n=null;
+      if(e.key==='ArrowRight')n=tabs[(i+1)%tabs.length];
+      if(e.key==='ArrowLeft')n=tabs[(i-1+tabs.length)%tabs.length];
+      if(n){e.preventDefault();n.focus();n.click();}
+    });
+  });
+})();
+</script>
+</body>
+</html>
